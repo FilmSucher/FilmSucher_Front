@@ -1,25 +1,63 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import HomePage from '@/views/HomePage.vue';
+import LoginPage from '@/views/LoginPage.vue';
+import SearchResult from '@/views/SearchResult.vue';
+import FavoritesPage from '@/views/FavoritesPage.vue';
+import EditMoviePage from '@/views/EditMoviePage.vue';
+import { getRoleFromToken } from '@/utils/auth';
 
 const routes = [
   {
     path: '/',
-    name: 'home',
-    component: HomeView
+    name: 'Home',
+    component: HomePage
   },
   {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-  }
-]
+    path: '/login',
+    name: 'Login',
+    component: LoginPage
+  },
+  {
+    path: '/results',
+    name: 'Results',
+    component: SearchResult
+  },
+  {
+    path: '/favorites',
+    name: 'Favorites',
+    component: FavoritesPage,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/edit/:id',
+    name: 'Edit',
+    component: EditMoviePage,
+    meta: { requiresAuth: true, requiresAdmin: true }
+  },
+  {
+    path: '/add',
+    name: 'Add',
+    component: EditMoviePage,
+    meta: { requiresAuth: true, requiresAdmin: true }
+  },
+];
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory(),
   routes
-})
+});
+
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('token');
+  const role = getRoleFromToken();
+
+  if (to.meta.requiresAuth && !token) {
+    next({ name: 'Login' });
+  } else if (to.meta.requiresAdmin && role !== 'ADMIN') {
+    next({ name: 'Home' });
+  } else {
+    next();
+  }
+});
 
 export default router
