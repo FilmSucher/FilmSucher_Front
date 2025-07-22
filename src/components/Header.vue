@@ -1,11 +1,14 @@
 <template>
     <header class="header">
-        <div class="title"> Movie Sucher</div>
+        <router-link to="/" class="title-link">
+            <div class="title">Film Sucher</div>
+        </router-link>
+
         <div class="auth-buttons">
-            <template v-if="token">
+            <template v-if="isAuthenticated">
                 <span class="username">{{ username }}</span>
                 <button @click="favorites">MyList</button>
-                <button @click="logout">Logout</button>
+                <button @click="handleLogout">Logout</button>
             </template>
             <template v-else>
                 <router-link to="/login">
@@ -16,36 +19,65 @@
                 <router-link to="/add-movie">
                     <button>Add New Film</button>
                 </router-link>
+                <router-link to="/edit-users">
+                    <button>Manage Users</button>
+                </router-link>
             </template>
         </div>
     </header>
 </template>
 
 <script>
-import { getRoleFromToken } from '@/utils/auth'
+import { computed } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAuth, logout, getRoleFromToken } from '@/utils/auth'
+
 export default {
-    computed: {
-        token() {
-            return localStorage.getItem('token');
-        },
-        username() {
-            return localStorage.getItem('username');
-        },
-        isAdmin () {
-            const role = getRoleFromToken();
-            return role === 'ADMIN'
-        }
-    },
-    methods: {
-        logout() {
-            localStorage.removeItem('token');
-            localStorage.removeItem('username');
-            this.$router.push('/');
-        },
-        favorites() {
-            this.$router.push('/favorites');
+    // computed: {
+    //     token() {
+    //         return localStorage.getItem('token');
+    //     },
+    //     username() {
+    //         return localStorage.getItem('username');
+    //     },
+    //     isAdmin () {
+    //         const role = getRoleFromToken();
+    //         return role === 'ADMIN'
+    //     }
+    // },
+    // methods: {
+    //     logout() {
+    //         localStorage.removeItem('token');
+    //         localStorage.removeItem('username');
+    //         this.$router.push('/');
+    //     },
+    //     favorites() {
+    //         this.$router.push('/favorites');
+    //     }
+    // }
+    setup() {
+        const router = useRouter();
+        const { isAuthenticated } = useAuth();
+
+        const username = computed(() => localStorage.getItem('username'));
+        const isAdmin = computed(() => getRoleFromToken() === 'ADMIN');
+
+        const handleLogout = () => {
+            logout();
+            router.push('/');
         }
 
+        const favorites = () => {
+            router.push('/favorites')
+        }
+
+        return {
+            isAuthenticated,
+            username,
+            isAdmin,
+            handleLogout,
+            favorites
+        }
     }
 };
 </script>
@@ -78,5 +110,13 @@ button {
 }
 button:hover {
   background: #666;
+}
+.title-link {
+  text-decoration: none;
+  color: inherit;
+}
+.title-link:hover .title {
+  text-decoration: underline;
+  cursor: pointer;
 }
 </style>

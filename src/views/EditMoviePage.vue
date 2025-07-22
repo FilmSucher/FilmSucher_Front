@@ -9,6 +9,15 @@
     <textarea v-model="form.description" placeholder="Description"></textarea>
     <input v-model="form.rating" placeholder="Rating" />
     <input v-model="form.image" placeholder="Image URL" />
+    <button @click="loadImage">Load Image</button>
+
+    <div v-if="imagePreview">
+      <p>Bild preview:</p>
+      <img :src="imagePreview" alt="Preview" style="max-width: 100%; max-height: 300px;" />
+    </div>
+    <div v-if="imageError" class="message">
+      {{ imageError }}
+    </div>
 
     <button @click="submit">Save</button>
   </div>
@@ -16,13 +25,14 @@
 
 <script>
 import { ref, onMounted} from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 export default {
   setup() {
     const token = localStorage.getItem('token');
     const route = useRoute();
-    const isEdit = ref(!!route.params.id);
+    const router = useRouter();
+    const isEdit = ref(route.params.id !== undefined);
     const form = ref({
         title: '',
         year: '',
@@ -34,35 +44,129 @@ export default {
         image: ''
         });
 
+      const imagePreview = ref('');
+      const imageError = ref('');
+
     onMounted( async () => {
         if (isEdit.value) {
+          try{
             const res = await fetch(`/api/films/${route.params.id}`, {
                 method: "GET",
                 headers: { 'Content-Type': 'application/json', 
                 Authorization: `Bearer ${token}` },
             });
-            form.value = await res.json();
+            
+            const data = await res.json();
+
+            if (res.ok) {
+                Object.assign(form.value, data);
+            } else {
+                alert(data.message || 'Error! Film not found!');
+            }
+          } catch (e){
+             alert("Error loading film: " + e.message);
+          }
         }
     });
 
+    // save button
     const submit = async () => {
+        const confirmed = window.confirm('Are you sure?');
+        if (!confirmed) return;
+      
+        if (!form.value.title.trim()) {
+          alert("Title is required");
+          return;
+        }
+        if (isNaN(Number(form.value.year)) || Number(form.value.year) < 1888) {
+          alert("Enter a valid year");
+          return;
+        }
+        if (!form.value.genre.trim()) {
+          alert("Genre is required");
+          return;
+        }
+        if (isNaN(Number(form.value.duration)) || Number(form.value.duration) < 0) {
+          alert("Enter a valid duration");
+          return;
+        }
+        if (!form.value.country.trim()) {
+          alert("Country is required");
+          return;
+        }
+        if (!form.value.description.trim()) {
+          alert("Description is required");
+          return;
+        }
+        if (isNaN(Number(form.value.rating)) || Number(form.value.rating) < 0 || Number(form.value.rating) > 10) {
+          alert("Enter a valid rating");
+          return;
+        }
+
         const method = isEdit.value? "PUT" : "POST";
         const url = isEdit.value
                     ? `/api/films/${route.params.id}`
                     : `/api/films`;
+        const body = {
+          ...form.value,
+          year: Number(form.value.year),
+          duration: Number(form.value.duration),
+          rating: Number(form.value.rating)
+        };
         
-        await fetch(url, {
-            method,
-            headers: { 'Content-Type': 'application/json', 
-                Authorization: `Bearer ${token}` },
-            body: JSON.stringify(form.value)
-        });
+        try{
+          await fetch(url, {
+              method,
+              headers: { 'Content-Type': 'application/json', 
+                  Authorization: `Bearer ${token}` },
+              body: JSON.stringify(body)
+          });
+  
+          const data = await res.json();
+  
+          if (res.ok) {
+              alert(data.message || 'Film saved!');
+              router.push("/");
+          } else {
+              alert(data.message || 'Error! Film not saved!');
+          }
+        } catch (err){
+            alert("Error saved film: " + err.message);
+        }
+    };
 
-        alert ('Movie saved!');
+    //preview image 
+    const loadImage = async () => {
+      const url = form.value.image.trim();
+
+      imagePreview.value = '';
+      imageError.value = '';
+
+      if (!url.startsWith('http')) {
+        imageError.value = 'Wrong URL. Usually start with http/https';
+        return;
+      }
+
+      try {
+        const res = await fetch(url, { method: 'HEAD' });
+
+        const contentType = res.headers.get('Content-Type') || '';
+        if (!res.ok || !contentType.startsWith('image/')) {
+          imageError.value = 'URL is not found!';
+          return;
+        }
+
+        imagePreview.value = url;
+      } catch (e) {
+        imageError.value = 'Image loading Error: ' + e.message;
+      }
     };
 
     return {
         form,
+        loadImage,
+        imagePreview,
+        imageError,
         isEdit,
         submit
     };

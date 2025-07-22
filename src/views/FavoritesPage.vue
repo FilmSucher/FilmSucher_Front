@@ -61,13 +61,14 @@ export default {
                 // get json
                 const data = await res.json();
 
-                if (Array.isArray(data)) {
+                if (res.ok && Array.isArray(data)) {
                     films.value = data;
                 } else {
                     films.value = [];
+                    alert(data.message || 'Error! Favorites not fetched!');
                 }
             } catch (error) {
-                console.error ('Request Error:', error);
+                alert ('Request Error: ' + error.message);
                 films.value = [];
             } finally {
                 loading.value = false;

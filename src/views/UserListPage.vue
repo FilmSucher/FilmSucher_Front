@@ -1,29 +1,19 @@
 <template>
-  <div class="result">
-    <div class="search-box">
-        <h1>Film Sucht</h1>
-        <input v-model="query" @keyup.enter="search" placeholder="query" />
-        <button @click="search">Such</button>
+  <div class="userList">
+    <div class="add_button">
+        <h1>Add new User</h1>
+        <button @click="addUser">Add User</button>
     </div>
 
     <div v-if="loading">Loading...</div>
     <div v-else-if="films.length === 0">Kein Results</div>
 
-    <div class="cards">
-        <MovieCard 
-            v-for="film in films"
-            :key="film.id"
-            :filmId="film.id"
-            :title="film.title"
-            :year="film.year"
-            :genre="film.genre"
-            :description="film.description"
-            :rating="film.rating"
-            :bildUrl="film.bildUrl"
-            :duration="film.duration"
-            :country="film.country"
-            :is-admin="isAdmin"
-            @deleted="refresh"
+    <div class="users">
+        <UserCard 
+            v-for="user in users"
+            :id="user.id"
+            :username="user.username"
+            :role="user.role"
         />
     </div>
   </div>
@@ -31,22 +21,19 @@
 
 <script>
 
-import MovieCard from '@/components/MovieCard.vue';
+import UserCard from '@/components/UserCard.vue';
 import { onMounted, ref, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import { getRoleFromToken } from '@/utils/auth';
 
 export default {
-    components: {MovieCard},
+    components: {UserCard},
     setup() {
         // values
         const router = useRouter();
         const route = useRoute();
 
-        const query = ref(route.query.prompt || '');
-        const films = ref([]);
+        const users = ref([]);
         const loading = ref(false);
-        const isAdmin = ref(getRoleFromToken() === 'ADMIN')
 
         // func for request
         const fetchFilms = async (searchTerm) => {
@@ -55,38 +42,28 @@ export default {
             
             try {
                 // do request
-                const res = await fetch(`/api/films?prompt=${encodeURIComponent(searchTerm)}`);
-
+                const res = await fetch('/api/users');
                 // get json
                 // json is valid?
                 let data = {};
                 try {
-                    data = await res.json();
+                data = await res.json();
                 } catch (e) {
-                    alert('Invalid JSON in response');
+                console.warn('Invalid JSON in response');
                 }
 
                 if (res.ok && Array.isArray(data)) {
-                    films.value = data;
+                    users.value = data;
                 } else {
-                    films.value = [];
-                    alert(data.message || `Search failed with status ${res.status}`);
+                    users.value = [];
+                    alert(data.message || `Fetching failed with status ${res.status}`);
                 }
             } catch (error) {
-                films.value = [];
-                alert ('Request Error: ' + error.message);
+                alert('Request Error:', error);
+                users.value = [];
             } finally {
                 loading.value = false;
             }
-        };
-
-        // read from inputfield
-        const search = () => {
-            const trimmed = query.value.trim();
-            if (trimmed.length === 0) return;
-
-            router.push({ name: 'Results', 
-                        query: { prompt: trimmed } });
         };
 
         const refresh = () => { fetchFilms(query.value); };
@@ -98,11 +75,6 @@ export default {
             }
         });
 
-        // func watch on URL Change
-        watch( () => route.query.prompt, (newPrompt) => {
-            query.value = newPrompt || '';
-            if (newPrompt) fetchFilms(newPrompt);
-        });
 
         return {
             query,

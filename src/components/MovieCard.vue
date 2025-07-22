@@ -116,10 +116,12 @@ export default{
             }
         },
         async editMovie() {
-            router.push({ name: 'Edit', 
-                      params: { id: filmId } });
+            router.push({ name: 'Edit', params: { id: filmId } });
         },
         async deleteMovie() {
+            const confirmed = window.confirm('Are you sure you want to delete this movie?');
+            if (!confirmed) return;
+            
             const token = localStorage.getItem('token');
             try {
                 const res = await fetch(`/api/films/${this.filmId}`, {
@@ -146,7 +148,7 @@ export default{
 
 <style scoped>
 .card {
-    display: flex;
+  display: flex;
   flex-direction: row;
   background: #fff;
   border-radius: 10px;

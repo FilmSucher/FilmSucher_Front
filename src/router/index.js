@@ -5,6 +5,8 @@ import SearchResult from '@/views/SearchResult.vue';
 import FavoritesPage from '@/views/FavoritesPage.vue';
 import EditMoviePage from '@/views/EditMoviePage.vue';
 import { getRoleFromToken } from '@/utils/auth';
+import ShowFilmPage from '@/views/ShowFilmPage.vue';
+import EditUserPage from '@/views/EditUserPage.vue';
 
 const routes = [
   {
@@ -23,6 +25,11 @@ const routes = [
     component: SearchResult
   },
   {
+    path: '/film/:id',
+    name: 'Film',
+    component: ShowFilmPage
+  },
+  {
     path: '/favorites',
     name: 'Favorites',
     component: FavoritesPage,
@@ -38,6 +45,18 @@ const routes = [
     path: '/add',
     name: 'Add',
     component: EditMoviePage,
+    meta: { requiresAuth: true, requiresAdmin: true }
+  },
+  {
+    path: '/users/edit/:id',
+    name: 'Edit User',
+    component: EditUserPage,
+    meta: { requiresAuth: true, requiresAdmin: true }
+  },
+  {
+    path: '/users/add',
+    name: 'Add User',
+    component: EditUserPage,
     meta: { requiresAuth: true, requiresAdmin: true }
   },
 ];

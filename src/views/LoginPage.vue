@@ -19,7 +19,7 @@
       </div>
 
     <div class="buttons">
-      <button @click="login">Login</button>
+      <button @click="handleLogin">Login</button>
       <button @click="register">Registration</button>
     </div>
     <div class="message" v-if="message">
@@ -31,6 +31,7 @@
 <script>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { login } from '@/utils/auth';
 
 export default {
   setup() {
@@ -39,33 +40,34 @@ export default {
     const message = ref('');
     const router = useRouter();
 
-    const login = async () => {
+    const handleLogin = async () => {
         const trimmed_name = username.value.trim();
         const trimmed_pass = password.value.trim();
-        if (trimmed_name.length === 0 || trimmed_pass === 0) {
+        if (trimmed_name.length === 0 || trimmed_pass.length === 0) {
             console.error ('Username or Password is empty');
             return;
         }
 
         try{
-            // const res = await fetch('http://localhost:3001/users', {
-            //     method: 'POST',
-            //     headers: { 'Content-Type': 'application/json' },
-            //     body: JSON.stringify({ username: username.value, 
-            //                           password: password.value })
-            // })
             const res = await fetch('/api/token', {
-                method: 'GET',
+                method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: username.value, 
+                                       password: password.value })
             })
-            const data = await res.json();
+            // json is valid?
+            let data = {};
+            try {
+              data = await res.json();
+            } catch (e) {
+              console.warn('Invalid JSON in response');
+            }
             
             if (res.ok && data.token) {
-                localStorage.setItem('token', data.token);
-                localStorage.setItem('username', username.value);
+                login(data.token, username.value);
                 router.push('/');
             } else {
-                message.value = data.message || 'Login Error';
+                message.value = data.message || `Login failed with status ${res.status}`;
             }
 
         } catch (err) {
@@ -92,7 +94,7 @@ export default {
             if (res.ok) {
                 message.value = 'Registration was successful. Now log in to your profile.';
             } else {
-                message.value = data.message || 'Register Error';
+                message.value = data.message || `Registration failed with status ${res.status}`;
             }
 
         } catch (err) {
