@@ -28,7 +28,8 @@ pipeline {
 		stage('Copy to Ansible container') {
             steps {
                 sh '''
-                    docker cp ${BUILD_DIR} ansible:/ansible/playbooks/roles/deploy-frontend/files/
+                    rm -rf /shared/frontend/dist
+					cp -r dist /shared/frontend/
                 '''
             }
         }
