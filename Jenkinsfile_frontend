@@ -6,12 +6,21 @@ pipeline {
     }
 
     stages {
-        
-		stage('Checkout') {
+        stage('Debug') {
             steps {
-                checkout scm
+                sh '''
+                    echo "Current dir: $(pwd)"
+                    ls -la
+                    git status || echo "Not a git repo"
+                '''
             }
         }
+
+		// stage('Checkout') {
+        //     steps {
+        //         checkout scm
+        //     }
+        // }
 		
         stage('Install deps') {
             steps {
