@@ -25,6 +25,8 @@ export function getRoleFromToken() {
   try {
     const payload = token.split('.')[1]; // base64 payload
     const decoded = JSON.parse(atob(payload));
+    const exp = decoded.exp;
+    if (Date.now() >= exp * 1000) return null;
     return decoded.role || null;
   } catch (e) {
     return null;

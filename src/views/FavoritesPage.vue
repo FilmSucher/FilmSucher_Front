@@ -18,7 +18,7 @@
             :bildUrl="film.bildUrl"
             :duration="film.duration"
             :country="film.country"
-            :is-admin="IsAdmin"
+            :is-admin="isAdmin"
             @deleted="refresh"
             />
     </div>
@@ -53,7 +53,7 @@ export default {
             
             try {
                 // do request
-                const res = await fetch('/api/favors', {
+                const res = await fetch('/api/films/favorites', {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json', 
                 Authorization: `Bearer ${token}`},
@@ -83,7 +83,8 @@ export default {
         return {
             films,
             loading,
-            isAdmin
+            isAdmin,
+            refresh
         };
     }
 };

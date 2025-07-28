@@ -55,7 +55,7 @@ export default {
             
             try {
                 // do request
-                const res = await fetch(`/api/films?prompt=${encodeURIComponent(searchTerm)}`);
+                const res = await fetch(`/api/films/films?prompt=${encodeURIComponent(searchTerm)}`);
 
                 // get json
                 // json is valid?
@@ -109,7 +109,8 @@ export default {
             search,
             films,
             loading,
-            isAdmin
+            isAdmin,
+            refresh
         };
     }
 };

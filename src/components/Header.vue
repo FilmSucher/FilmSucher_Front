@@ -33,28 +33,6 @@ import { useRouter } from 'vue-router'
 import { useAuth, logout, getRoleFromToken } from '@/utils/auth'
 
 export default {
-    // computed: {
-    //     token() {
-    //         return localStorage.getItem('token');
-    //     },
-    //     username() {
-    //         return localStorage.getItem('username');
-    //     },
-    //     isAdmin () {
-    //         const role = getRoleFromToken();
-    //         return role === 'ADMIN'
-    //     }
-    // },
-    // methods: {
-    //     logout() {
-    //         localStorage.removeItem('token');
-    //         localStorage.removeItem('username');
-    //         this.$router.push('/');
-    //     },
-    //     favorites() {
-    //         this.$router.push('/favorites');
-    //     }
-    // }
     setup() {
         const router = useRouter();
         const { isAuthenticated } = useAuth();

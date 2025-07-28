@@ -36,7 +36,7 @@ export default{
     },
     methods: {
         async editUser() {
-            router.push({ name: 'Edit User', params: { id: id } });
+            router.push({ name: 'Edit User', params: { id: this.id } });
         },
         async deleteUser() {
             const confirmed = window.confirm('Are you sure you want to delete this User?');

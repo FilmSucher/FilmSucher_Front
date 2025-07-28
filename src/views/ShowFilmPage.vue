@@ -15,12 +15,13 @@
           <p class="description">{{ form.description }}</p>
         </div>
         <div class="actions">
+          <template>
+              <button @click="addFavorite">Add in MyList</button>
+              <button @click="delFavorite">Delete from MyList</button>
+          </template>
           <template v-if="isAdmin">
               <button @click="editMovie">Edit Film</button>
               <button @click="deleteMovie">Delete Film</button>
-          </template>
-          <template v-else>
-              <button @click="addFavorite">Add in MyList</button>
           </template>
         </div>
     </div>
@@ -51,7 +52,7 @@ export default {
 
     onMounted( async () => {
         try{
-            const res = await fetch(`/api/films/${route.params.id}`, {
+            const res = await fetch(`/api/films/films/${route.params.id}`, {
                 method: "GET",
                 headers: { 'Content-Type': 'application/json', 
                 Authorization: `Bearer ${token}` },
@@ -78,7 +79,7 @@ export default {
         if (!confirmed) return;
 
         try {
-            const res = await fetch(`/api/films/${form.value.filmId}`,{
+            const res = await fetch(`/api/films/admin_films/${form.value.filmId}`,{
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -101,7 +102,7 @@ export default {
 
     const addFavorite = async () => {
         try {
-            const res = await fetch(`/api/favors/${form.value.filmId}`, {
+            const res = await fetch(`/api/films/favorites/${form.value.filmId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -120,13 +121,33 @@ export default {
             alert('Error adding favorite: '+ err);
         }
     };
-
+    const delFavorite = async() => {
+      try {
+            const res = await fetch(`/api/favors/${this.filmId}`, {
+              method: 'DELETE',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+              }
+            });
+            
+            if (res.ok) {
+              alert('Film deleted from MyList!');
+            } else {
+              alert('Error! Film not deleted!');
+            }
+          } catch (err) {
+            console.error('Error:', err);
+          }
+    };
+    
     return {
         form,
         isAdmin,
         editMovie,
         deleteMovie,
-        addFavorite
+        addFavorite,
+        delFavorite
     };
   }
 };

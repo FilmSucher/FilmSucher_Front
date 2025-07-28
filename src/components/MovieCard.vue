@@ -12,13 +12,13 @@
             <p class="description">{{ description }}</p>
             
             <div class="actions">
+                <template>
+                    <button @click="addFavorite">Add in MyList</button>
+                    <button @click="delFavorite">Delete from MyList</button>
+                </template>
                 <template v-if="isAdmin">
                     <button @click="editMovie">Edit Film</button>
                     <button @click="deleteMovie">Delete Film</button>
-                </template>
-                <template v-else>
-                    <button @click="addFavorite">Add in MyList</button>
-                    <button @click="delFavorite">Delete from MyList</button>
                 </template>
             </div>
         </div>
@@ -116,7 +116,7 @@ export default{
             }
         },
         async editMovie() {
-            router.push({ name: 'Edit', params: { id: filmId } });
+            router.push({ name: 'Edit', params: { id: this.filmId } });
         },
         async deleteMovie() {
             const confirmed = window.confirm('Are you sure you want to delete this movie?');

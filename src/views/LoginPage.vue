@@ -49,7 +49,7 @@ export default {
         }
 
         try{
-            const res = await fetch('/api/token', {
+            const res = await fetch('/api/users/auth/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username: username.value, 
@@ -84,7 +84,7 @@ export default {
         }
 
         try{
-            const res = await fetch('/api/users', {
+            const res = await fetch('/api/users/auth/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username: username.value, 
@@ -105,7 +105,7 @@ export default {
     return {
         username,
         password,
-        login,
+        handleLogin,
         register,
         message
     };

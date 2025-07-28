@@ -30,6 +30,7 @@
       </div>
 
     <button @click="submit">Save</button>
+    <button @click="deleteUser">Delete</button>
   </div>
 </template>
 
@@ -70,6 +71,31 @@ export default {
         }
     });
 
+    const deleteUser = async () => {
+      const confirmed = window.confirm('Are you sure you want to delete this User?');
+      if (!confirmed) return;
+            
+      const token = localStorage.getItem('token');
+      try {
+        const res = await fetch(`/api/users/${this.id}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+          }
+        });
+
+        if (res.ok) {
+          alert('User deleted');
+          this.$emit('deleted');
+        } else {
+          alert('Error! User not deleted!');
+        }
+      } catch (err) {
+        console.error('Error:', err);
+      }
+    };
+
     const submit = async () => {
         if (!form.value.username.trim()) {
           alert("Username is required");
@@ -86,10 +112,10 @@ export default {
 
         const method = isEdit.value? "PATCH" : "POST";
         const url = isEdit.value
-                    ? `/api/users/${route.params.id}`
-                    : `/api/users`;
+                    ? `/api/users/admin/user/${route.params.id}`
+                    : `/api/users/admin/user`;
         try{
-          await fetch(url, {
+          const res = await fetch(url, {
               method,
               headers: { 'Content-Type': 'application/json', 
                   Authorization: `Bearer ${token}` },
@@ -112,7 +138,8 @@ export default {
     return {
         form,
         isEdit,
-        submit
+        submit,
+        deleteUser
     };
   }
 };

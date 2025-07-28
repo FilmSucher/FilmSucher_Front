@@ -20,6 +20,7 @@
     </div>
 
     <button @click="submit">Save</button>
+    <button v-if="isEdit" @click="deleteMovie">Delete</button>
   </div>
 </template>
 
@@ -50,7 +51,7 @@ export default {
     onMounted( async () => {
         if (isEdit.value) {
           try{
-            const res = await fetch(`/api/films/${route.params.id}`, {
+            const res = await fetch(`/api/films/films/${route.params.id}`, {
                 method: "GET",
                 headers: { 'Content-Type': 'application/json', 
                 Authorization: `Bearer ${token}` },
@@ -105,8 +106,8 @@ export default {
 
         const method = isEdit.value? "PUT" : "POST";
         const url = isEdit.value
-                    ? `/api/films/${route.params.id}`
-                    : `/api/films`;
+                    ? `/api/films/admin_films/${route.params.id}`
+                    : `/api/films/admin_films`;
         const body = {
           ...form.value,
           year: Number(form.value.year),
@@ -115,7 +116,7 @@ export default {
         };
         
         try{
-          await fetch(url, {
+          const res = await fetch(url, {
               method,
               headers: { 'Content-Type': 'application/json', 
                   Authorization: `Bearer ${token}` },
@@ -133,6 +134,31 @@ export default {
         } catch (err){
             alert("Error saved film: " + err.message);
         }
+    };
+
+    const deleteMovie = async() => {
+      const confirmed = window.confirm('Are you sure you want to delete this movie?');
+      if (!confirmed) return;
+            
+      const token = localStorage.getItem('token');
+      try {
+        const res = await fetch(`/api/films/${this.filmId}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+          }
+        });
+
+        if (res.ok) {
+          alert('Film deleted');
+          this.$emit('deleted');
+        } else {
+          alert('Error! Film not deleted!');
+        }
+      } catch (err) {
+        console.error('Error:', err);
+      }
     };
 
     //preview image 
@@ -168,7 +194,8 @@ export default {
         imagePreview,
         imageError,
         isEdit,
-        submit
+        submit,
+        deleteMovie
     };
   }
 };

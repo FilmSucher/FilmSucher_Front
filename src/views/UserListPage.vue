@@ -6,7 +6,7 @@
     </div>
 
     <div v-if="loading">Loading...</div>
-    <div v-else-if="films.length === 0">Kein Results</div>
+    <div v-else-if="users.length === 0">Kein Results</div>
 
     <div class="users">
         <UserCard 
@@ -14,6 +14,7 @@
             :id="user.id"
             :username="user.username"
             :role="user.role"
+            @deleted="refresh"
         />
     </div>
   </div>
@@ -36,20 +37,19 @@ export default {
         const loading = ref(false);
 
         // func for request
-        const fetchFilms = async (searchTerm) => {
-            if (!searchTerm) return;
+        const fetchUsers = async () => {
             loading.value = true;
             
             try {
                 // do request
-                const res = await fetch('/api/users');
+                const res = await fetch('/api/users/admin');
                 // get json
                 // json is valid?
                 let data = {};
                 try {
-                data = await res.json();
+                    data = await res.json();
                 } catch (e) {
-                console.warn('Invalid JSON in response');
+                    console.warn('Invalid JSON in response');
                 }
 
                 if (res.ok && Array.isArray(data)) {
@@ -58,30 +58,31 @@ export default {
                     users.value = [];
                     alert(data.message || `Fetching failed with status ${res.status}`);
                 }
-            } catch (error) {
-                alert('Request Error:', error);
+            } catch (e) {
                 users.value = [];
+                alert('Request Error:' + e.message);
             } finally {
                 loading.value = false;
             }
         };
 
-        const refresh = () => { fetchFilms(query.value); };
+        const addUser = () => {
+            router.push({ name: 'Add User' });
+        };
+
+        const refresh = () => fetchUsers();
 
         // func for start page
-        onMounted(() => {
-            if (query.value) {
-                fetchFilms(query.value);
-            }
-        });
-
+        onMounted(fetchUsers);
 
         return {
             query,
             search,
-            films,
+            users,
             loading,
-            isAdmin
+            isAdmin,
+            refresh,
+            addUser
         };
     }
 };
