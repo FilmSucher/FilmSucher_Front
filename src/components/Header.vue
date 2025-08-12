@@ -1,7 +1,7 @@
 <template>
     <header class="header">
         <router-link to="/" class="title-link">
-            <div class="title">Film Sucher1</div>
+            <div class="title">Film Sucher</div>
         </router-link>
 
         <div class="auth-buttons">
