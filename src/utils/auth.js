@@ -40,6 +40,9 @@ export function getRoleFromToken() {
 
     const exp = decoded.exp;
     if (Date.now() >= exp * 1000) return null;
+    console.log("roles:", decoded.roles);
+    console.log("erste roles:", decoded.roles[0]);
+    
     return decoded.roles[0] || null;
   } catch (e) {
     return null;

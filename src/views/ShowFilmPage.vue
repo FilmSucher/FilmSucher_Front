@@ -37,7 +37,7 @@ export default {
     const token = localStorage.getItem('token');
     const route = useRoute();
     const router = useRouter();
-    const { isAuthenticated } = ref(useAuth());
+    const { isAuthenticated } = useAuth();
     const isAdmin = ref(getRoleFromToken() === 'ROLE_ADMIN');
     const form = ref({
         filmId: '',

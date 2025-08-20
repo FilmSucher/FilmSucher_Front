@@ -47,7 +47,7 @@ export default {
         const query = ref(route.query.prompt || '');
         const films = ref([]);
         const loading = ref(false);
-        const { isAuthenticated } = ref(useAuth());
+        const { isAuthenticated } = useAuth();
         const isAdmin = ref(getRoleFromToken() === 'ROLE_ADMIN')
 
         // func for request
