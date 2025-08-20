@@ -31,7 +31,6 @@ export default {
     setup() {
         // values
         const router = useRouter();
-        const route = useRoute();
 
         const users = ref([]);
         const loading = ref(false);
@@ -76,11 +75,8 @@ export default {
         onMounted(fetchUsers);
 
         return {
-            query,
-            search,
             users,
             loading,
-            isAdmin,
             refresh,
             addUser
         };

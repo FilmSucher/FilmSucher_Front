@@ -7,6 +7,7 @@ import EditMoviePage from '@/views/EditMoviePage.vue';
 import { useAuth } from '@/utils/auth';
 import ShowFilmPage from '@/views/ShowFilmPage.vue';
 import EditUserPage from '@/views/EditUserPage.vue';
+import UserListPage from '@/views/UserListPage.vue';
 
 const routes = [
   {
@@ -59,6 +60,12 @@ const routes = [
     component: EditUserPage,
     meta: { requiresAuth: true, requiresAdmin: true }
   },
+  {
+    path: '/users',
+    name: 'Users',
+    component: UserListPage,
+    meta: { requiresAuth: true, requiresAdmin: true }
+  },
 ];
 
 const router = createRouter({
@@ -72,7 +79,7 @@ router.beforeEach((to, from, next) => {
 
   if (to.meta.requiresAuth && !token) {
     next({ name: 'Login' });
-  } else if (to.meta.requiresAdmin && isAdmin) {
+  } else if (to.meta.requiresAdmin && !isAdmin) {
     next({ name: 'Home' });
   } else {
     next();

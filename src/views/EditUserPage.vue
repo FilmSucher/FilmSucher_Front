@@ -43,7 +43,8 @@ export default {
     const token = localStorage.getItem('token');
     const route = useRoute();
     const router = useRouter();
-    const isEdit = ref(route.params.id !== undefined);
+    const id = ref(route.params.id)
+    const isEdit = ref(id !== undefined);
     const form = ref({
         username: '',
         password: '',
@@ -138,6 +139,7 @@ export default {
     return {
         form,
         isEdit,
+        id,
         submit,
         deleteUser
     };

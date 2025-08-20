@@ -6,7 +6,7 @@
 
         <div class="auth-buttons">
             <template v-if="isAuthenticated">
-                <span class="username">{{ currentUser }}</span>
+                <span class="username">{{ username }}</span>
                 <button @click="favorites">MyList</button>
                 <button @click="handleLogout">Logout</button>
             </template>
@@ -19,7 +19,7 @@
                 <router-link to="/add">
                     <button>Add New Film</button>
                 </router-link>
-                <router-link to="/users/add">
+                <router-link to="/users">
                     <button>Manage Users</button>
                 </router-link>
             </template>
