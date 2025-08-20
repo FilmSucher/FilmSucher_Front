@@ -15,7 +15,7 @@
                     <button>Login</button>
                 </router-link>
             </template>
-            <template v-if="isAdmin.value">
+            <template v-if="isAdmin">
                 <router-link to="/add">
                     <button>Add New Film</button>
                 </router-link>

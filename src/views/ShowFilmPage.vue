@@ -71,7 +71,7 @@ export default {
     });
     
     const editMovie = async () => {
-        router.push({ name: 'Edit', params: { id: form.value.filmId } });
+        router.push({ name: 'Edit', params: { id: route.params.id } });
     };
 
     const deleteMovie = async () => {
