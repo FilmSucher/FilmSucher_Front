@@ -4,7 +4,7 @@ import LoginPage from '@/views/LoginPage.vue';
 import SearchResult from '@/views/SearchResult.vue';
 import FavoritesPage from '@/views/FavoritesPage.vue';
 import EditMoviePage from '@/views/EditMoviePage.vue';
-import { getRoleFromToken } from '@/utils/auth';
+import { useAuth } from '@/utils/auth';
 import ShowFilmPage from '@/views/ShowFilmPage.vue';
 import EditUserPage from '@/views/EditUserPage.vue';
 
@@ -68,11 +68,11 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem('token');
-  const role = getRoleFromToken();
+  const { isAdmin } = useAuth();
 
   if (to.meta.requiresAuth && !token) {
     next({ name: 'Login' });
-  } else if (to.meta.requiresAdmin && role !== 'ROLE_ADMIN') {
+  } else if (to.meta.requiresAdmin && isAdmin) {
     next({ name: 'Home' });
   } else {
     next();

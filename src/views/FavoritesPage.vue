@@ -29,7 +29,7 @@
 import MovieCard from '@/components/MovieCard.vue';
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { getRoleFromToken } from '@/utils/auth';
+import { useAuth } from '@/utils/auth';
 
 
 export default {
@@ -41,7 +41,7 @@ export default {
         const loading = ref(false);
 
         const token = localStorage.getItem('token')   
-        const isAdmin = ref(getRoleFromToken() === 'ROLE_ADMIN')     
+        const { isAdmin} = useAuth     
 
         // func for request
         const fetchFavors = async () => {

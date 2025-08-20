@@ -35,7 +35,7 @@
 import MovieCard from '@/components/MovieCard.vue';
 import { onMounted, ref, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import { getRoleFromToken, useAuth } from '@/utils/auth';
+import { useAuth } from '@/utils/auth';
 
 export default {
     components: {MovieCard},
@@ -47,8 +47,7 @@ export default {
         const query = ref(route.query.prompt || '');
         const films = ref([]);
         const loading = ref(false);
-        const { isAuthenticated } = useAuth();
-        const isAdmin = ref(getRoleFromToken() === 'ROLE_ADMIN')
+        const { isAuthenticated, isAdmin } = useAuth();
 
         // func for request
         const fetchFilms = async (searchTerm) => {

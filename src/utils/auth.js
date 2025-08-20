@@ -2,6 +2,7 @@ import { ref } from 'vue';
 
 const isAuthenticated = ref(!!localStorage.getItem('token'));
 const currentUser = ref(localStorage.getItem('username'));
+const isAdmin = ref(false);
 
 export function login(token, username) {
   localStorage.setItem('token', token);
@@ -18,10 +19,11 @@ export function logout() {
 }
 
 export function useAuth() {
-  return { isAuthenticated, currentUser };
+  isAdmin.value = (getRoleFromToken() === 'ROLE_ADMIN');
+  return { isAuthenticated, currentUser, isAdmin };
 }
 
-export function getRoleFromToken() {
+function getRoleFromToken() {
   const token = localStorage.getItem('token');
   if (!token) return null;
 

@@ -30,15 +30,14 @@
 <script>
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { getRoleFromToken, useAuth } from '@/utils/auth';
+import { useAuth } from '@/utils/auth';
 
 export default {
   setup() {
     const token = localStorage.getItem('token');
     const route = useRoute();
     const router = useRouter();
-    const { isAuthenticated } = useAuth();
-    const isAdmin = ref(getRoleFromToken() === 'ROLE_ADMIN');
+    const { isAuthenticated, isAdmin } = useAuth();
     const form = ref({
         filmId: '',
         title: '',

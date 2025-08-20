@@ -6,7 +6,7 @@
 
         <div class="auth-buttons">
             <template v-if="isAuthenticated">
-                <span class="username">{{ username }}</span>
+                <span class="username">{{ currentUser }}</span>
                 <button @click="favorites">MyList</button>
                 <button @click="handleLogout">Logout</button>
             </template>
@@ -15,38 +15,36 @@
                     <button>Login</button>
                 </router-link>
             </template>
-            <template v-if="isAdmin">
-                <router-link to="/add-movie">
+            <template v-if="isAdmin.value">
+                <router-link to="/add">
                     <button>Add New Film</button>
                 </router-link>
-                <router-link to="/edit-users">
+                <router-link to="/users/add">
                     <button>Manage Users</button>
                 </router-link>
             </template>
         </div>
         <!-- DEBUGS BLOCK -->
-        <div class="debug-info">
+        <!-- <div class="debug-info">
           <p>isAuthenticated: {{ isAuthenticated }}</p>
           <p>username: {{ username }}</p>
           <p>role (getRoleFromToken): {{ role }}</p>
           <p>isAdmin (computed): {{ isAdmin }}</p>
-        </div>
+        </div> -->
     </header>
 </template>
 
 <script>
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { useAuth, logout, getRoleFromToken } from '@/utils/auth'
+import { useAuth, logout } from '@/utils/auth'
 
 export default {
     setup() {
         const router = useRouter();
-        const { isAuthenticated, currentUser } = useAuth();
+        const { isAuthenticated, currentUser, isAdmin } = useAuth();
 
         const username = computed(() => currentUser.value);
-        const role = computed(() => getRoleFromToken());
-        const isAdmin = computed(() => role.value === 'ROLE_ADMIN');
 
         const handleLogout = () => {
             logout();
