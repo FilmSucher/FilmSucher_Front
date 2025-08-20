@@ -28,7 +28,7 @@
         <div class="debug-info">
           <p>isAuthenticated: {{ isAuthenticated }}</p>
           <p>username: {{ username }}</p>
-          <p>role (getRoleFromToken): {{ role }}</p>
+          <p>role (getRoleFromToken): {{ role.value }}</p>
           <p>isAdmin (computed): {{ isAdmin }}</p>
         </div>
     </header>

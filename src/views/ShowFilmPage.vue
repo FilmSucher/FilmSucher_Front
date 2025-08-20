@@ -1,7 +1,7 @@
 <template>
     <div class="film">
         <div class="column poster">
-          <img :src="form.posterUrl " :alt="form.title"/>
+          <img :src="form.bildUrl" :alt="form.title"/>
         </div>
         <div class="column info">
           <h2 class="title">{{ form.title }}</h2>
@@ -15,7 +15,7 @@
           <p class="description">{{ form.description }}</p>
         </div>
         <div class="actions">
-          <template>
+          <template v-if="isAuthenticated">
               <button @click="addFavorite">Add in MyList</button>
               <button @click="delFavorite">Delete from MyList</button>
           </template>
@@ -30,13 +30,14 @@
 <script>
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { getRoleFromToken } from '@/utils/auth';
+import { getRoleFromToken, useAuth } from '@/utils/auth';
 
 export default {
   setup() {
     const token = localStorage.getItem('token');
     const route = useRoute();
     const router = useRouter();
+    const { isAuthenticated } = ref(useAuth());
     const isAdmin = ref(getRoleFromToken() === 'ADMIN');
     const form = ref({
         filmId: '',
@@ -47,7 +48,7 @@ export default {
         country: '',
         rating: '',
         description: '',
-        posterUrl : '',
+        bildUrl : '',
     });
 
     onMounted( async () => {
@@ -144,6 +145,7 @@ export default {
     return {
         form,
         isAdmin,
+        isAuthenticated,
         editMovie,
         deleteMovie,
         addFavorite,

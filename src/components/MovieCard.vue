@@ -93,6 +93,9 @@ export default{
                         Authorization: `Bearer ${token}`
                     }
                 });
+                
+                // debuging 
+                console.log(res);
 
                 if (res.ok) {
                     alert('Film added in MyList!');
