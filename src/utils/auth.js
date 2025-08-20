@@ -25,6 +25,16 @@ export function getRoleFromToken() {
   try {
     const payload = token.split('.')[1]; // base64 payload
     const decoded = JSON.parse(atob(payload));
+
+    // debugs logging
+    if (decoded.iat) {
+      console.log("Issued at (iat):", new Date(decoded.iat * 1000).toLocaleString());
+    }
+    if (decoded.exp) {
+      console.log("Expires (exp):", new Date(decoded.exp * 1000).toLocaleString());
+    }
+    console.log("Full decoded payload:", decoded);
+
     const exp = decoded.exp;
     if (Date.now() >= exp * 1000) return null;
     return decoded.role || null;

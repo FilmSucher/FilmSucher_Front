@@ -24,6 +24,13 @@
                 </router-link>
             </template>
         </div>
+        <!-- DEBUGS BLOCK -->
+        <div class="debug-info">
+          <p>isAuthenticated: {{ isAuthenticated }}</p>
+          <p>username: {{ username }}</p>
+          <p>role (getRoleFromToken): {{ role }}</p>
+          <p>isAdmin (computed): {{ isAdmin }}</p>
+        </div>
     </header>
 </template>
 
@@ -38,7 +45,8 @@ export default {
         const { isAuthenticated } = useAuth();
 
         const username = computed(() => localStorage.getItem('username'));
-        const isAdmin = computed(() => getRoleFromToken() === 'ADMIN');
+        const role = computed(() => getRoleFromToken());
+        const isAdmin = computed(() => role.value === 'ADMIN');
 
         const handleLogout = () => {
             logout();

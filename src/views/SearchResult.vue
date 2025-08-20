@@ -23,6 +23,7 @@
             :duration="film.duration"
             :country="film.country"
             :is-admin="isAdmin"
+            :is-authenticated="isAuthenticated"
             @deleted="refresh"
         />
     </div>
@@ -34,7 +35,7 @@
 import MovieCard from '@/components/MovieCard.vue';
 import { onMounted, ref, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import { getRoleFromToken } from '@/utils/auth';
+import { getRoleFromToken, useAuth } from '@/utils/auth';
 
 export default {
     components: {MovieCard},
@@ -46,6 +47,7 @@ export default {
         const query = ref(route.query.prompt || '');
         const films = ref([]);
         const loading = ref(false);
+        const isAuthenticated = ref(useAuth());
         const isAdmin = ref(getRoleFromToken() === 'ADMIN')
 
         // func for request
@@ -110,6 +112,7 @@ export default {
             films,
             loading,
             isAdmin,
+            isAuthenticated,
             refresh
         };
     }

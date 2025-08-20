@@ -1,10 +1,14 @@
 <template>
     <div class="card">
         <div class="column poster">
-            <img :src="bildUrl" :alt="title"/>
+            <router-link :to="`/film/${this.filmId}`">
+                <img :src="bildUrl" :alt="title"/>
+            </router-link>
         </div>
         <div class="column info">
-            <h2 class="title">{{ title }}</h2>
+            <router-link :to="`/film/${this.filmId}`">
+                <h2 class="title">{{ title }}</h2>
+            </router-link>
             <p class="year"><strong>Year:</strong>{{ year }}</p>
             <p class="genre"><strong>Genre:</strong> {{ genre }}</p>
             <p class="duration"><strong>Duration:</strong>{{ duration }}</p>
@@ -12,7 +16,7 @@
             <p class="description">{{ description }}</p>
             
             <div class="actions">
-                <template>
+                <template v-if="isAuthenticated">
                     <button @click="addFavorite">Add in MyList</button>
                     <button @click="delFavorite">Delete from MyList</button>
                 </template>
@@ -68,6 +72,10 @@ export default{
         country: {
             type: String,
             required: false
+        },
+        isAuthenticated: {
+            type: Boolean,
+            default: false
         },
         isAdmin: {
             type: Boolean,
