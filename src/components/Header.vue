@@ -28,7 +28,7 @@
         <div class="debug-info">
           <p>isAuthenticated: {{ isAuthenticated }}</p>
           <p>username: {{ username }}</p>
-          <p>role (getRoleFromToken): {{ role.value }}</p>
+          <p>role (getRoleFromToken): {{ role }}</p>
           <p>isAdmin (computed): {{ isAdmin }}</p>
         </div>
     </header>
@@ -46,7 +46,7 @@ export default {
 
         const username = computed(() => currentUser.value);
         const role = computed(() => getRoleFromToken());
-        const isAdmin = computed(() => role.value === 'ADMIN');
+        const isAdmin = computed(() => role.value === 'ROLE_ADMIN');
 
         const handleLogout = () => {
             logout();

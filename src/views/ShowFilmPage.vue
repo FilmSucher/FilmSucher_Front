@@ -38,7 +38,7 @@ export default {
     const route = useRoute();
     const router = useRouter();
     const { isAuthenticated } = ref(useAuth());
-    const isAdmin = ref(getRoleFromToken() === 'ADMIN');
+    const isAdmin = ref(getRoleFromToken() === 'ROLE_ADMIN');
     const form = ref({
         filmId: '',
         title: '',

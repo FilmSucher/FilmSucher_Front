@@ -41,7 +41,7 @@ export default {
         const loading = ref(false);
 
         const token = localStorage.getItem('token')   
-        const isAdmin = ref(getRoleFromToken() === 'ADMIN')     
+        const isAdmin = ref(getRoleFromToken() === 'ROLE_ADMIN')     
 
         // func for request
         const fetchFavors = async () => {

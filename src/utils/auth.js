@@ -39,9 +39,9 @@ export function getRoleFromToken() {
     console.log("Full decoded payload:", decoded);
 
     const exp = decoded.exp;
-    if (Date.now() >= exp * 1000) return "less";
-    return decoded.role || "null";
+    if (Date.now() >= exp * 1000) return null;
+    return decoded.roles[0] || null;
   } catch (e) {
-    return "Err";
+    return null;
   }
 }

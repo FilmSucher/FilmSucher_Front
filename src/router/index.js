@@ -72,7 +72,7 @@ router.beforeEach((to, from, next) => {
 
   if (to.meta.requiresAuth && !token) {
     next({ name: 'Login' });
-  } else if (to.meta.requiresAdmin && role !== 'ADMIN') {
+  } else if (to.meta.requiresAdmin && role !== 'ROLE_ADMIN') {
     next({ name: 'Home' });
   } else {
     next();

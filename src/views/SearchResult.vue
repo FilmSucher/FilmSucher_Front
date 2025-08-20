@@ -48,7 +48,7 @@ export default {
         const films = ref([]);
         const loading = ref(false);
         const { isAuthenticated } = ref(useAuth());
-        const isAdmin = ref(getRoleFromToken() === 'ADMIN')
+        const isAdmin = ref(getRoleFromToken() === 'ROLE_ADMIN')
 
         // func for request
         const fetchFilms = async (searchTerm) => {
