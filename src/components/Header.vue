@@ -42,9 +42,9 @@ import { useAuth, logout, getRoleFromToken } from '@/utils/auth'
 export default {
     setup() {
         const router = useRouter();
-        const { isAuthenticated } = useAuth();
+        const { isAuthenticated, currentUser } = useAuth();
 
-        const username = computed(() => localStorage.getItem('username'));
+        const username = computed(() => currentUser.value);
         const role = computed(() => getRoleFromToken());
         const isAdmin = computed(() => role.value === 'ADMIN');
 

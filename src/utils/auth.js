@@ -1,21 +1,24 @@
 import { ref } from 'vue';
 
 const isAuthenticated = ref(!!localStorage.getItem('token'));
+const currentUser = ref(localStorage.getItem('username'));
 
 export function login(token, username) {
   localStorage.setItem('token', token);
   localStorage.setItem('username', username);
   isAuthenticated.value = true;
+  currentUser.value = username;
 }
 
 export function logout() {
   localStorage.removeItem('token');
   localStorage.removeItem('username');
   isAuthenticated.value = false;
+  currentUser.value = null;
 }
 
 export function useAuth() {
-  return { isAuthenticated };
+  return { isAuthenticated, currentUser };
 }
 
 export function getRoleFromToken() {
@@ -36,9 +39,9 @@ export function getRoleFromToken() {
     console.log("Full decoded payload:", decoded);
 
     const exp = decoded.exp;
-    if (Date.now() >= exp * 1000) return null;
-    return decoded.role || null;
+    if (Date.now() >= exp * 1000) return "less";
+    return decoded.role || "null";
   } catch (e) {
-    return null;
+    return "Err";
   }
 }
