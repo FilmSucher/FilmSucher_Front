@@ -31,6 +31,7 @@ export default {
     setup() {
         // values
         const router = useRouter();
+        const token = localStorage.getItem('token');
 
         const users = ref([]);
         const loading = ref(false);
@@ -41,7 +42,11 @@ export default {
             
             try {
                 // do request
-                const res = await fetch('/api/users/admin');
+                const res = await fetch(`/api/users/admin/user`, {
+                    method: "GET",
+                    headers: { 'Content-Type': 'application/json', 
+                    Authorization: `Bearer ${token}` },
+                });
                 // get json
                 // json is valid?
                 let data = {};

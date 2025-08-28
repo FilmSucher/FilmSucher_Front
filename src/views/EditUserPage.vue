@@ -54,7 +54,7 @@ export default {
     onMounted( async () => {
         if (isEdit.value) {
           try{
-            const res = await fetch(`/api/users/${route.params.id}`, {
+            const res = await fetch(`/api/users/admin/user/${route.params.id}`, {
                 method: "GET",
                 headers: { 'Content-Type': 'application/json', 
                 Authorization: `Bearer ${token}` },
@@ -75,10 +75,9 @@ export default {
     const deleteUser = async () => {
       const confirmed = window.confirm('Are you sure you want to delete this User?');
       if (!confirmed) return;
-            
-      const token = localStorage.getItem('token');
+
       try {
-        const res = await fetch(`/api/users/${this.id}`, {
+        const res = await fetch(`/api/users/admin/user/${this.id}`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
