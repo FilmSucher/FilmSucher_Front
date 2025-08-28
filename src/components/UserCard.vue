@@ -44,7 +44,7 @@ export default{
             
             const token = localStorage.getItem('token');
             try {
-                const res = await fetch(`/api/users/${this.id}`, {
+                const res = await fetch(`api/users/admin/user/${this.id}`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',

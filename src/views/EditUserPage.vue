@@ -87,11 +87,13 @@ export default {
           }
         });
 
+        const data = await res.json();
+
         if (res.ok) {
-          alert('User deleted');
+          alert(data.message || 'User deleted');
           emit('deleted');
         } else {
-          alert('Error! User not deleted!');
+          alert(data.message || 'Error! User not deleted!');
         }
       } catch (err) {
         console.error('Error:', err);

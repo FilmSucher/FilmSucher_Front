@@ -86,7 +86,7 @@ export default{
         async addFavorite() {
             const token = localStorage.getItem('token');
             try {
-                const res = await fetch(`/api/favors/${this.filmId}`, {
+                const res = await fetch(`/api/films/favorites/${this.filmId}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -109,7 +109,7 @@ export default{
         async delFavorite() {
             const token = localStorage.getItem('token');
             try {
-                const res = await fetch(`/api/favors/${this.filmId}`, {
+                const res = await fetch(`/api/films/favorites/${this.filmId}`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
@@ -135,7 +135,7 @@ export default{
             
             const token = localStorage.getItem('token');
             try {
-                const res = await fetch(`/api/films/${this.filmId}`, {
+                const res = await fetch(`/api/films/admin_films/${this.filmId}`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',

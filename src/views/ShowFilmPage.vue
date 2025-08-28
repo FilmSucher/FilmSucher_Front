@@ -130,11 +130,13 @@ export default {
                 Authorization: `Bearer ${token}`
               }
             });
+
+            const data = await res.json();
             
             if (res.ok) {
-              alert('Film deleted from MyList!');
+              alert(data.message || 'Film deleted from MyList!');
             } else {
-              alert('Error! Film not deleted!');
+             alert(data.message || 'Error! Film not deleted!');
             }
           } catch (err) {
             console.error('Error:', err);

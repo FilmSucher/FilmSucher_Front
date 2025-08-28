@@ -8,7 +8,7 @@
     <input v-model="form.country" placeholder="Country" />
     <textarea v-model="form.description" placeholder="Description"></textarea>
     <input v-model="form.rating" placeholder="Rating" />
-    <input v-model="form.image" placeholder="Image URL" />
+    <input v-model="form.bildUrl" placeholder="Image URL" />
     <button @click="loadImage">Load Image</button>
 
     <div v-if="imagePreview">
@@ -45,7 +45,7 @@ export default {
         country: '',
         description: '',
         rating: '',
-        image: ''
+        bildUrl: ''
         });
 
       const imagePreview = ref('');
@@ -145,7 +145,7 @@ export default {
             
       const token = localStorage.getItem('token');
       try {
-        const res = await fetch(`/api/films/${id.value}`, {
+        const res = await fetch(`/api/films/admin_films/${id.value}`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
@@ -166,7 +166,7 @@ export default {
 
     //preview image 
     const loadImage = async () => {
-      const url = form.value.image.trim();
+      const url = form.value.bildUrl.trim();
 
       imagePreview.value = '';
       imageError.value = '';
