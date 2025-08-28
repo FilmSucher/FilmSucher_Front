@@ -1,4 +1,4 @@
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 
 const isAuthenticated = ref(!!localStorage.getItem('token'));
 const currentUser = ref(localStorage.getItem('username'));
