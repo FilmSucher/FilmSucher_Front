@@ -39,12 +39,14 @@ import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 export default {
-  setup() {
+  setup(props, { emit }) {
     const token = localStorage.getItem('token');
     const route = useRoute();
     const router = useRouter();
+
     const id = ref(route.params.id)
-    const isEdit = ref(id !== undefined);
+    const isEdit = ref(!!id.value);
+
     const form = ref({
         username: '',
         password: '',
@@ -54,7 +56,7 @@ export default {
     onMounted( async () => {
         if (isEdit.value) {
           try{
-            const res = await fetch(`/api/users/admin/user/${route.params.id}`, {
+            const res = await fetch(`/api/users/admin/user/${id.value}`, {
                 method: "GET",
                 headers: { 'Content-Type': 'application/json', 
                 Authorization: `Bearer ${token}` },
@@ -77,7 +79,7 @@ export default {
       if (!confirmed) return;
 
       try {
-        const res = await fetch(`/api/users/admin/user/${this.id}`, {
+        const res = await fetch(`/api/users/admin/user/${id.value}`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
@@ -87,7 +89,7 @@ export default {
 
         if (res.ok) {
           alert('User deleted');
-          this.$emit('deleted');
+          emit('deleted');
         } else {
           alert('Error! User not deleted!');
         }
@@ -112,7 +114,7 @@ export default {
 
         const method = isEdit.value? "PATCH" : "POST";
         const url = isEdit.value
-                    ? `/api/users/admin/user/${route.params.id}`
+                    ? `/api/users/admin/user/${id.value}`
                     : `/api/users/admin/user`;
         try{
           const res = await fetch(url, {

@@ -29,11 +29,14 @@ import { ref, onMounted} from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 export default {
-  setup() {
+  setup({ emit }) {
     const token = localStorage.getItem('token');
     const route = useRoute();
     const router = useRouter();
-    const isEdit = ref(route.params.id !== undefined);
+
+    const id = ref(route.params.id);
+    const isEdit = ref(!!id.value);
+
     const form = ref({
         title: '',
         year: '',
@@ -51,7 +54,7 @@ export default {
     onMounted( async () => {
         if (isEdit.value) {
           try{
-            const res = await fetch(`/api/films/films/${route.params.id}`, {
+            const res = await fetch(`/api/films/films/${id.value}`, {
                 method: "GET",
                 headers: { 'Content-Type': 'application/json', 
                 Authorization: `Bearer ${token}` },
@@ -106,7 +109,7 @@ export default {
 
         const method = isEdit.value? "PUT" : "POST";
         const url = isEdit.value
-                    ? `/api/films/admin_films/${route.params.id}`
+                    ? `/api/films/admin_films/${id.value}`
                     : `/api/films/admin_films`;
         const body = {
           ...form.value,
@@ -142,7 +145,7 @@ export default {
             
       const token = localStorage.getItem('token');
       try {
-        const res = await fetch(`/api/films/${this.filmId}`, {
+        const res = await fetch(`/api/films/${id.value}`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
@@ -152,7 +155,7 @@ export default {
 
         if (res.ok) {
           alert('Film deleted');
-          this.$emit('deleted');
+          emit('deleted');
         } else {
           alert('Error! Film not deleted!');
         }

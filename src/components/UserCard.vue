@@ -96,7 +96,7 @@ export default{
 .name {
   justify-content: center;
   align-items: center;
-  width: 100px;
+  width: 300px;
   text-align: center;
 }
 .role {
