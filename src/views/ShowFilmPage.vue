@@ -137,10 +137,10 @@ export default {
             if (res.ok) {
               alert(data.message || 'Film deleted from MyList!');
             } else {
-             alert(data.message || 'Error! Film not deleted!');
+              alert(data.message || 'Error! Film not deleted!');
             }
           } catch (err) {
-            console.error('Error:', err);
+            alert('Error delete favorite: '+ err);
           }
     };
     

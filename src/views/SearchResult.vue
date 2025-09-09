@@ -51,7 +51,6 @@ export default {
 
         // func for request
         const fetchFilms = async (searchTerm) => {
-            // if (!searchTerm) return;
             loading.value = true;
             
             try {
@@ -84,7 +83,6 @@ export default {
         // read from inputfield
         const search = () => {
             const trimmed = query.value.trim();
-            // if (trimmed.length === 0) return;
 
             router.push({ name: 'Results', 
                         query: { prompt: trimmed } });
@@ -94,15 +92,13 @@ export default {
 
         // func for start page
         onMounted(() => {
-            // if (query.value) {
             fetchFilms(query.value);
-            // }
         });
 
         // func watch on URL Change
         watch( () => route.query.prompt, (newPrompt) => {
             query.value = newPrompt || '';
-            if (newPrompt) fetchFilms(newPrompt);
+            fetchFilms(newPrompt);
         });
 
         return {

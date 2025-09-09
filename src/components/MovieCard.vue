@@ -95,15 +95,15 @@ export default{
                 });
                 
                 // debuging 
-                console.log(res);
+                const data = await res.json();
 
                 if (res.ok) {
-                    alert('Film added in MyList!');
+                    alert(data.message || 'Film added in MyList!');
                 } else {
-                    alert('Error! Film not added!');
+                    alert(data.message || 'Error! Film not added!');
                 }
             } catch (err) {
-                console.error('Error:', err);
+                alert('Error adding favorite: '+ err);
             }
         },
         async delFavorite() {
@@ -118,12 +118,12 @@ export default{
                 });
 
                 if (res.ok) {
-                    alert('Film deleted from MyList!');
+                    alert(data.message || 'Film deleted from MyList!');
                 } else {
-                    alert('Error! Film not deleted!');
+                    alert(data.message || 'Error! Film not deleted!');
                 }
             } catch (err) {
-                console.error('Error:', err);
+                alert('Error delete favorite: '+ err);
             }
         },
         async editMovie() {
@@ -143,11 +143,11 @@ export default{
                     }
                 });
 
-                if (res.ok) {
-                    alert('Film deleted');
+                if (res.ok){
+                    alert(data.message || 'Film deleted');
                     this.$emit('deleted');
                 } else {
-                    alert('Error! Film not deleted!');
+                    alert(data.message || 'Error! Film not deleted!');
                 }
             } catch (err) {
                 console.error('Error:', err);

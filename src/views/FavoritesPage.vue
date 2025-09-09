@@ -42,7 +42,7 @@ export default {
         const loading = ref(false);
 
         const token = localStorage.getItem('token')   
-        const { isAuthenticated, isAdmin} = useAuth     
+        const { isAuthenticated, isAdmin } = useAuth();     
 
         // func for request
         const fetchFavorites = async () => {
