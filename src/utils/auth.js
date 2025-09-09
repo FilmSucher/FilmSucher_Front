@@ -2,12 +2,14 @@ import { ref, computed } from 'vue';
 
 const isAuthenticated = ref(!!localStorage.getItem('token'));
 const currentUser = ref(localStorage.getItem('username'));
+const role = ref(getRoleFromToken());
 
 export function login(token, username) {
   localStorage.setItem('token', token);
   localStorage.setItem('username', username);
   isAuthenticated.value = true;
   currentUser.value = username;
+  role.value = getRoleFromToken();
 }
 
 export function logout() {
@@ -15,10 +17,11 @@ export function logout() {
   localStorage.removeItem('username');
   isAuthenticated.value = false;
   currentUser.value = null;
+  role.value = null;
 }
 
 export function useAuth() {
-  const isAdmin = computed(() => getRoleFromToken() === 'ROLE_ADMIN');
+  const isAdmin = computed(() => role.value === 'ROLE_ADMIN');
   return { isAuthenticated, currentUser, isAdmin };
 }
 

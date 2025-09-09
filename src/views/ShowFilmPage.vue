@@ -49,10 +49,11 @@ export default {
         description: '',
         bildUrl : '',
     });
+    const id = ref(route.params.id);
 
     onMounted( async () => {
         try{
-            const res = await fetch(`/api/films/films/${route.params.id}`, {
+            const res = await fetch(`/api/films/films/${id.value}`, {
                 method: "GET",
                 headers: { 'Content-Type': 'application/json', 
                 Authorization: `Bearer ${token}` },
@@ -71,7 +72,7 @@ export default {
     });
     
     const editMovie = async () => {
-        router.push({ name: 'Edit', params: { id: route.params.id } });
+        router.push({ name: 'Edit', params: { id: id.value } });
     };
 
     const deleteMovie = async () => {
@@ -79,7 +80,7 @@ export default {
         if (!confirmed) return;
 
         try {
-            const res = await fetch(`/api/films/admin_films/${form.value.filmId}`,{
+            const res = await fetch(`/api/films/admin_films/${id.value}`,{
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -102,7 +103,7 @@ export default {
 
     const addFavorite = async () => {
         try {
-            const res = await fetch(`/api/films/favorites/${form.value.filmId}`, {
+            const res = await fetch(`/api/films/favorites/${id.value}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -123,7 +124,7 @@ export default {
     };
     const delFavorite = async() => {
       try {
-            const res = await fetch(`/api/favors/${this.filmId}`, {
+            const res = await fetch(`/api/films/favorites/${id.value}`, {
               method: 'DELETE',
               headers: {
                 'Content-Type': 'application/json',

@@ -21,7 +21,7 @@ export default {
 
     const search = () => {
         const trimmed = query.value.trim();
-        if (trimmed.length === 0) return;
+        // if (trimmed.length === 0) return;
 
         router.push({ name: 'Results', 
                       query: { prompt: trimmed } });

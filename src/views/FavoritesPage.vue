@@ -18,6 +18,7 @@
             :bildUrl="film.bildUrl"
             :duration="film.duration"
             :country="film.country"
+            :is-authenticated="isAuthenticated"
             :is-admin="isAdmin"
             @deleted="refresh"
             />
@@ -41,10 +42,10 @@ export default {
         const loading = ref(false);
 
         const token = localStorage.getItem('token')   
-        const { isAdmin } = useAuth     
+        const { isAuthenticated, isAdmin} = useAuth     
 
         // func for request
-        const fetchFavors = async () => {
+        const fetchFavorites = async () => {
             if (!token) {
                 router.push('/login');
                 return;
@@ -75,15 +76,16 @@ export default {
             }
         };
 
-        const refresh = () => { fetchFavors(); };
+        const refresh = () => { fetchFavorites(); };
 
         // func for start page
-        onMounted(fetchFavors);
+        onMounted(fetchFavorites);
 
         return {
             films,
             loading,
             isAdmin,
+            isAuthenticated,
             refresh
         };
     }
